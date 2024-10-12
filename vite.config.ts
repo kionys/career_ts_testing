@@ -30,6 +30,10 @@ export default defineConfig({
     globals: true,
     environment: 'jsdom',
     setupFiles: './src/utils/test/setupTests.ts',
+    coverage: {
+      provider: 'v8', // v8으로 변경
+      reporter: ['text', 'html'],
+    },
   },
 
   resolve: {
