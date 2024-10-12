@@ -1,9 +1,9 @@
 import { pageRoutes } from '@/apiRoutes';
-import { NotFoundPage } from '@/pages/error/components/NotFoundPage';
-import render from '@/utils/test/render';
+import customRender from '@/utils/test/render';
 import { screen } from '@testing-library/react';
 import { useNavigate } from 'react-router-dom';
 import { vi } from 'vitest';
+import { EmptyNotice } from '../EmptyNotice';
 
 // react-router-dom을 MemoryRouter로 모킹하기
 type ReactRouterDOMType = typeof import('react-router-dom');
@@ -23,15 +23,15 @@ vi.mock('react-router-dom', async (importOriginal) => {
   };
 });
 
-it('Home으로 이동 버튼 클릭시 홈 경로로 이동하는 navigate가 실행된다', async () => {
-  // Arrange: NotFoundPage 컴포넌트를 렌더링
-  const { user } = await render(<NotFoundPage />);
+it('"홈으로 가기" 링크를 클릭할 경우 "/" 경로로 navigate 함수가 호출된다', async () => {
+  // Arrange: EmptyNotice 컴포넌트를 렌더링
+  const { user } = await customRender(<EmptyNotice />);
 
-  // Act: "Home으로 이동" 버튼 클릭
-  const homeButton = screen.getByText('Home으로 이동');
-  await user.click(homeButton);
+  // Act: "홈으로 가기" 버튼 클릭
+  const homeLink = screen.getByText('홈으로 가기');
+  await user.click(homeLink);
 
-  // Assert: navigate 함수가 '/'와 { replace: true }로 호출되었는지 확인
-  const navigate = useNavigate(); // 모킹된 함수 호출
-  expect(navigate).toHaveBeenCalledWith(pageRoutes.main, { replace: true });
+  // Assert: navigate 함수가 '/' 경로로 호출되었는지 확인
+  const navigate = useNavigate(); // 모킹된 navigate 함수 가져오기
+  expect(navigate).toHaveBeenCalledWith(pageRoutes.main);
 });
